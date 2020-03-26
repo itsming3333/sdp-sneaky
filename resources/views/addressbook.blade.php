@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="LogoSneaky.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <link rel="icon" href="LogoSneaky.png">
+    <title>Account Dashboard</title>
     <!-- materialize -->
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/materialize.min.css') }}"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{{asset('assets/css/materialize.min.css')}}"  media="screen,projection"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- jquery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <!-- swiper  -->
     <link rel="stylesheet" href="{{asset('assets/css/swiper.min.css')}}">
     <!-- navbar -->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/navbar.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/footer.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/swiper.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/cart.css')}}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://kit.fontawesome.com/c39198c184.js" crossorigin="anonymous"></script>
     <style>
@@ -23,15 +24,9 @@
         width: 98%;
         height: 25%;
     }
-    .icon-brow{
-        color: #cfcfcf;
-    }
-    i, .input-field input:focus{
-        color: #000 !important;
-    }
-    .input-field input:focus {
-        border-bottom: 1px solid #cfcfcf !important;
-        box-shadow: 0 1px 0 0 #cfcfcf !important
+    .tulisan{
+        color: grey;
+        font-family: 'Roboto Condensed', sans-serif;
     }
     </style>
     <script>
@@ -45,27 +40,11 @@
                     $(this).removeClass('open');
                 }
             });      
-            $('.toggle').on('click', function() {
-                $('.menu').toggleClass('active');
-            });      
+            $('.tabs').tabs();      
         });
     </script>
 </head>
 <body>
-    <!-- drop down content-->
-    <ul id='jenisUSer' class='dropdown-content'>
-        <li><a href="#!">Penjual</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#!">Customer</a></li>
-    </ul>
-    <ul id='jenisUSer' class='dropdown-content'>
-        <li><a href="#!">jatim</a></li>
-        <li><a href="#!">jabar</a></li>
-    </ul>
-    <ul id='jenisUSer' class='dropdown-content'>
-        <li><a href="#!">jember</a></li>
-        <li><a href="#!">bratang</a></li>
-    </ul>
     <div id="search"> 
         <form role="search" id="searchform" action="/search" method="get">
             <input value="" name="q" type="search" placeholder="Type to search"/>
@@ -89,10 +68,10 @@
     </div>
     <div class="swiper-container swiper1">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/1.jpeg')}})"></div>
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/2.jpeg')}})"></div>
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/3.jpeg')}})"></div>
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/4.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/1.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/2.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/3.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/4.jpeg')}})"></div>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination swiper-pagination-white"></div>
@@ -100,75 +79,40 @@
         <div class="swiper-button-next swiper-button"></div>
         <div class="swiper-button-prev swiper-button"></div>
     </div>
-    <!-- isi sign up -->
+    <!-- isi dash -->
     <div class="container" style="max-width: 1920px; width: 80%;">
         <div class="row">
             <div class="col s12" style="background-color: #e0e0e0;">
-                <h3>Sign Up.</h3>
+                <h3>Address Book</h3>
             </div>
         </div>
         <div class="row">
-            <div class="col s12">
-                PERSONAL INFORMATION
+            <div class="col s3">
+                <a href="" class="tulisan">Account Dashboard</a>
+                <hr>
+                <a href="" class="tulisan">Edit Account</a>
+                <hr>
+                <a href="" class="tulisan">Address Book</a>
+                <hr>
+                <a href="" class="tulisan">My Orders</a>
+                <hr>
+                <a href="" class="tulisan">My Wishlist</a>
+                <hr>
             </div>
-        </div>
-        <div class="row">
-            <form action="" class="col s12">
-                <div class="row">
-                    <div class="input-field col s6">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">First Name</label>
-                    </div>
-                    <div class="input-field col s6">
-                      <input id="last_name" type="text" class="validate">
-                      <label for="last_name">Last Name</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                      <input id="username" type="text" class="validate">
-                      <label for="username">Username</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                      <input id="password" type="password" class="validate">
-                      <label for="password">Password</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                      <input id="email" type="email" class="validate">
-                      <label for="email">Email</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='jenisUser' style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Jenis User</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                      <textarea id="alamat" class="materialize-textarea"></textarea>
-                      <label for="alamat">Alamat</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='provinsi' style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">--Pilih Provinsi--</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='kota' style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">--Pilih Kota--</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s3 offset-s10">
-                        <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;"><i class="material-icons right">send</i>Submit</a>
-                    </div>
-                </div>
-            </form>
+            <div class="col s3 offset-s1">
+                <span class="tulisan">DEFAULT SHIPPING ADDRESS</span>
+                <br>
+                nama <br>
+                alamat <br>
+                dan lain lain
+            </div>
+            <div class="col s3 offset-s1">
+                <span class="tulisan">NEW ADDRESS</span> <br>
+                Add your new address
+                <br>
+                <br>
+                <a class="waves-effect waves-light btn grey lighten-2 proceed">Add new Address</a>
+            </div>
         </div>
     </div>
     <!-- dibawah ini footer -->
@@ -207,6 +151,11 @@
             </div>
         </div>
     </footer>
+    <script>
+        $('.toggle').on('click', function() {
+            $('.menu').toggleClass('active');
+        });
+    </script>
     <script type="text/javascript" src="{{asset('assets/js/swiper.min.js')}}"></script>
     <script>
         var swiper = new Swiper('.swiper1', {

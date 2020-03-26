@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="LogoSneaky.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Shop</title>
+    <link rel="icon" href="LogoSneaky.png">
+    <title>Account Dashboard</title>
     <!-- materialize -->
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/materialize.min.css') }}"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{{asset('assets/css/materialize.min.css')}}"  media="screen,projection"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -24,32 +24,13 @@
         width: 98%;
         height: 25%;
     }
-    .icon-brow{
-        color: #cfcfcf;
-    }
-    .harga-produk{
-        color: #02075d;
-        font-weight: bold;
+    .tulisan{
+        color: grey;
         font-family: 'Roboto Condensed', sans-serif;
-        font-size: 23px;
-    }
-    .stok-produk{
-        color: #1821a1;
-        font-weight: bold;
-        font-family: 'Roboto Condensed', sans-serif;
-    }
-    .input-field input:focus{
-        color: #000 !important;
     }
     .input-field input:focus {
         border-bottom: 1px solid #cfcfcf !important;
-        box-shadow: 0 1px 0 0 #cfcfcf !important;
-    }
-    .tabs .indicator{
-        background-color: #cfcfc4;
-    }
-    .tabs .tab a:focus, .tabs .tab a:focus.active{
-        background: transparent;
+        box-shadow: 0 1px 0 0 #cfcfcf !important
     }
     </style>
     <script>
@@ -91,10 +72,10 @@
     </div>
     <div class="swiper-container swiper1">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/1.jpeg')}})"></div>
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/2.jpeg')}})"></div>
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/3.jpeg')}})"></div>
-            <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/4.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/1.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/2.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/3.jpeg')}})"></div>
+          <div class="swiper-slide" style="background-image:url({{asset('assets/images/SwiperFoto/4.jpeg')}})"></div>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination swiper-pagination-white"></div>
@@ -102,88 +83,107 @@
         <div class="swiper-button-next swiper-button"></div>
         <div class="swiper-button-prev swiper-button"></div>
     </div>
-    <!-- isi detail shop -->
+    <!-- isi dash -->
     <div class="container" style="max-width: 1920px; width: 80%;">
         <div class="row">
             <div class="col s12" style="background-color: #e0e0e0;">
-                <h3>Nama Produk Disini</h3>
+                <h3>Account Dashboard</h3>
             </div>
         </div>
         <div class="row">
-            <div class="col s12 product-view">
-                <div class="row">
-                    <div class="col s6" style="margin-top: 200px;">
-                        <img src="SwiperFoto/download.jpg" alt="">
-                    </div>
-                    <div class="col s6">
-                        <div class="row">
-                            <div class="col s6" style="margin-top: 5px;">
-                                <span class="harga-produk">IDR 1,799,000</span>
-                            </div>
-                            <div class="col s6" style="margin-top: 10px;">
-                                Avaibility : <span class="stok-produk">(kondisi di database)</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col s12">
-                                <span class="size">
-                                    SIZE: <span class="size-pilih"> * </span> <!-- ini ukuran dari kotak dibawah -->
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row"> <!-- ini ukuran dari data base -->
-                            <div class="col s12">
-                                <a class="waves-effect waves-light btn-small grey lighten-2" style="color: black; font-weight: bold;">13</a>
-                                <a class="waves-effect waves-light btn-small grey lighten-2" style="color: black; font-weight: bold;">12</a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s4">
-                                <input id="icon_prefix" type="number" class="validate " style="text-align: center;" min="0">
-                            </div>
-                            <div class="col s4">
-                                <a class="waves-effect waves-light btn grey lighten-2 proceed" style="margin-top: 20px;">Add To Cart</a>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col s12">
-                                <span class="tulisan">ini isi kategorinya</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col s12">
-                                <span class="tulisan">Brand : </span><!-- image logo brand -->
-                                <br>
-                                <span class="tulisan">Product Code : </span><!-- database produk code -->
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col s6">
-                                <i class="fa fa-star"></i><span class="tulisan">Add To Wishlist</span>
-                            </div>
-                            <div class="col s6">
-                                <span class="tulisan">Share this Product &nbsp</span><i class="fa fa-facebook"></i>&nbsp&nbsp<i class="fa fa-instagram"></i>&nbsp&nbsp<i class="fa fa-twitter"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col s3">
+                <a href="" class="tulisan">Account Dashboard</a>
+                <hr>
+                <a href="" class="tulisan">Edit Account</a>
+                <hr>
+                <a href="" class="tulisan">Address Book</a>
+                <hr>
+                <a href="" class="tulisan">My Orders</a>
+                <hr>
+                <a href="" class="tulisan">My Wishlist</a>
+                <hr>
             </div>
-            <div class="row">
-                <div class="col s8">
-                    <ul class="tabs">
-                        <li class="tab col s4"><a href="#test1" style="color:#02075d;font-weight: bold;">Product Description</a></li>
-                        <li class="tab col s4"><a href="#test2" style="color:#02075d;font-weight: bold;">Size & Fit</a></li>
-                        <li class="tab col s4"><a href="#test3" style="color:#02075d;font-weight: bold;">Riview</a></li>
-                      </ul>
+            <div class="col s8 offset-s1">
+                <div class="row">
+                    <div class="col s12">
+                        Hi <span class="nama-cust">Fu Ming!</span> &nbsp&nbsp<b>Thanks for joining Sneaky</b>
+                        <hr>
+                    </div>
                 </div>
-                <!-- ini data database -->
-                <div id="test1" class="col s12">Test 1</div>
-                <div id="test2" class="col s12">Test 2</div>
-                <div id="test3" class="col s12">Test 3</div>
+                <div class="row">
+                    <div class="col s12">
+                        <span class="tulisan">NEW ORDERS</span>&nbsp&nbsp<a href="" class="tulisan">VIEW ALL</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <table>
+                            <thead style="background-color: #cfcfcf;opacity: 0.7;">
+                              <tr>
+                                  <th>Name</th>
+                                  <th>Item Name</th>
+                                  <th>Item Price</th>
+                              </tr>
+                            </thead>
+                    
+                            <tbody>
+                              <tr>
+                                <td>Alvin</td>
+                                <td>Eclair</td>
+                                <td>$0.87</td>
+                              </tr>
+                              <tr>
+                                <td>Alan</td>
+                                <td>Jellybean</td>
+                                <td>$3.76</td>
+                              </tr>
+                              <tr>
+                                <td>Jonathan</td>
+                                <td>Lollipop</td>
+                                <td>$7.00</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="row">
+                            <span class="tulisan" style="font-size:24px;">Account Information</span>
+                        </div>
+                        <div class="row">
+                            <div class="col s12" style="border: 2px solid #cfcfc4;">
+                                <span class="tulisan" style="font-size:20px;">
+                                    Contact Information
+                                </span>
+                                <a href=""><i class="material-icons right">create</i></a>
+                                <hr>
+                                data orang disni
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12" style="border: 2px solid #cfcfc4;">
+                                <span class="tulisan" style="font-size:20px;">
+                                    Address Information
+                                </span>
+                                <a href=""><i class="material-icons right">create</i></a>
+                                <hr>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <span class="tulisan" style="font-size:17px;">
+                                            Shipping Address
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        ini data address
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Prototyping
-Route::get('/p_adressbook', 'PrototypeCtr@tryAdressbook');
+Route::get('/p_addressbook', 'PrototypeCtr@tryAddressbook');
 Route::get('/p_cart', 'PrototypeCtr@tryCart');
 Route::get('/p_chat', 'PrototypeCtr@tryChat');
-Route::get('/p_dashboardacc', 'PrototypeCtr@tryDashboardacc');
+Route::get('/p_accdash', 'PrototypeCtr@tryAccdash');
 Route::get('/p_detailshop', 'PrototypeCtr@tryDetailshop');
 Route::get('/p_dhistory', 'PrototypeCtr@tryDhistory');
 Route::get('/p_dpost', 'PrototypeCtr@tryDpost');
@@ -27,7 +27,7 @@ Route::get('/p_forum', 'PrototypeCtr@tryForum');
 Route::get('/p_home', 'PrototypeCtr@tryHome');
 Route::get('/p_login', 'PrototypeCtr@tryLogin');
 Route::get('/p_mypost', 'PrototypeCtr@tryMypost');
-Route::get('/p_orderhistory', 'PrototypeCtr@tryOrderhistory');
+Route::get('/p_orderhistory', 'PrototypeCtr@tryMyorder');
 Route::get('/p_payment', 'PrototypeCtr@tryPayment');
 Route::get('/p_post', 'PrototypeCtr@tryPost');
 Route::get('/p_retur', 'PrototypeCtr@tryRetur');

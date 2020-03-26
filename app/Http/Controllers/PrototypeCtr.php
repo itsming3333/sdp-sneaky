@@ -11,9 +11,9 @@ use Illuminate\Routing\Controller as BaseController;
 
 class PrototypeCtr extends BaseController
 {
-    public function tryAdressbook(Request $request)
+    public function tryAddressbook(Request $request)
     {
-        return view('adressbook');
+        return view('addressbook');
     }
 
     public function tryCart(Request $request)
@@ -26,9 +26,9 @@ class PrototypeCtr extends BaseController
         return view('chat');
     }
 
-    public function tryDashboardacc(Request $request)
+    public function tryAccdash(Request $request)
     {
-        return view('dashboardacc');
+        return view('accdash');
     }
 
     public function tryDetailshop(Request $request)
@@ -76,9 +76,9 @@ class PrototypeCtr extends BaseController
         return view('mypost');
     }
 
-    public function tryOrderhistory(Request $request)
+    public function tryMyorder(Request $request)
     {
-        return view('orderhistory');
+        return view('myorder');
     }
 
     public function tryPayment(Request $request)
