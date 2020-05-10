@@ -8,6 +8,7 @@ class model_dtrans extends Model
 {
     protected $connection= 'mysql';
     protected $table= 'dtrans';
+    protected $primaryKey= ['id_transaksi','id_dsneaker'];
     protected $fillable= [
         'id_transaksi',
         'id_dsneaker',
