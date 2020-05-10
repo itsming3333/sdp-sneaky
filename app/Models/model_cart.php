@@ -8,7 +8,7 @@ class model_cart extends Model
 {
     protected $connection= 'mysql';
     protected $table = "cart";
-    protected $primarykey = "id_cart";
+    protected $primaryKey = "id_cart";
     protected $fillable = [
         'id_cart',
         'id_user',
