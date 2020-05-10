@@ -14,15 +14,18 @@ class CreateHtransTable extends Migration
     public function up()
     {
         Schema::create('htrans', function (Blueprint $table) {
-            $table->integer('id_transaksi');
+            $table->bigIncrements('id_transaksi');
             $table->integer('id_user');
             $table->integer('id_kota');
             $table->date('tgl_beli');
             $table->integer('jumlah_barang');
             $table->integer('total');
             $table->string('detail_pengiriman');
-            $table->tinyInteger('status_pengiriman');
+            $table->string('status_pengiriman');
             $table->integer('biaya_pengiriman');
+            $table->integer('id_seller');
+            $table->integer('id_addr');
+            $table->string('resi');
             $table->timestamps();
         });
     }

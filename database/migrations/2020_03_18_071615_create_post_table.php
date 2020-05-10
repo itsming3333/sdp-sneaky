@@ -19,6 +19,9 @@ class CreatePostTable extends Migration
             $table->integer('total_up');
             $table->integer('total_down');
             $table->date('tgl_post');
+            $table->string('judul_post');
+            $table->string('caption_post',1000);
+            $table->integer('id_approver');
             $table->timestamps();
         });
     }

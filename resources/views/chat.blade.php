@@ -65,11 +65,43 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @elseif($user_logon->jenis_user == "customer")
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @else
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{url('myItem')}}';">My item</li>
+                    <li onclick="location.href='{{url('myOrder')}}';">My Order</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @endif
             </ul>
         </div>
     </div>
@@ -95,30 +127,89 @@
         </div>
         <div class="row">
             <div class="col s4" style="border: 2px solid rgb(156, 156, 156);">
-                <div class="row">
-                    ini org org yang di chat
-                </div>
+                @foreach($allChat as $all)
+                    <div class="row" style="padding-left:15px; width:100%;padding-top:12px;">
+                        @foreach($allUser as $u)
+                            @if($all->id_tujuan == $u->id_user)
+                                @if($currChat != null)
+                                    @if($u->id_user == $currChat[0]->id_tujuan || $u->id_user == $currChat[0]->id_user)
+                                        <div style="color:darkblue;font-size:150%;">
+                                            {{$u->nama}}
+                                        </div>
+                                    @else
+                                        <form action="/goChat" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id_tujuan" value="{{$u->id_user}}">
+                                            <input type="submit" value="{{$u->nama}}" style="border:none;color:black;">
+                                        </form>
+                                    @endif
+                                @else
+                                    <form action="/goChat" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id_tujuan" value="{{$u->id_user}}">
+                                        <input type="submit" value="{{$u->nama}}" style="border:none;color:black;">
+                                    </form>
+                                @endif
+                            @endif
+                        @endforeach
+                    </div>
+                    <hr>
+                @endforeach
             </div>
-            <div class="col s8" style="border: 2px solid rgb(156, 156, 156);">
-                <div class="row">
-                    <!-- ini isi chat -->
-                    isi chat disini
+            @if($currChat == null)
+            
+            @else
+                <div class="col s8" style="border: 2px solid rgb(156, 156, 156);">
+                    @foreach($currChat as $c)
+                        <div class="row" style="">
+                            <!-- ini isi chat -->
+                            @if($c->id_user == $user_logon->id_user)
+                                <div style="margin:20px 10px;right:0;position:relative;" class="right">
+                                    <div style="padding:1px 20px;background-color:lightgreen;width:400px;">
+                                        <p>{{$c->isi_chat}}</p>
+                                    </div>
+                                    <div style="font-size:70%;color:gray;" class="right">
+                                        {{$c->created_at}}
+                                    </div>
+                                </div>
+                            @else
+                                <div style="margin:20px 10px;right:0;position:relative;">
+                                    <div style="padding:1px 20px;background-color:lightgray;width:400px;">
+                                        <p>{{$c->isi_chat}}</p>
+                                    </div>
+                                    <div style="font-size:70%;color:gray;">
+                                        {{$c->created_at}}
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                    <hr>
+                    <div class="row">
+                        <form class="col s12" action="/sendChat" method="POST">
+                            @csrf
+                            <div class="input-field col s10">
+                                <i class="material-icons prefix icon-edit">mode_edit</i>
+                                <textarea placehodler="Message here" id="icon_prefix2" class="materialize-textarea" name="msg"></textarea>
+                            </div>
+                            <div class="input-field col s1">
+                                @if($currChat[0]->id_user==$user_logon->id_user)
+                                    <input type="hidden" name="id_tujuan" value="{{$currChat[0]->id_tujuan}}">
+                                @else
+                                    <input type="hidden" name="id_tujuan" value="{{$currChat[0]->id_user}}">
+                                @endif
+                                <button class="btn waves-effect waves-light grey lighten-1" type="submit" name="action">
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                            <div style="color:red;">{{ $errors->first('msg') }}</div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+                
+            @endif
         </div>
-        <div class="row">
-            <form class="col offset-s4 s8">
-                <div class="input-field col s10">
-                    <i class="material-icons prefix icon-edit">mode_edit</i>
-                    <textarea placehodler="Message here" id="icon_prefix2" class="materialize-textarea"></textarea>
-                </div>
-                <div class="input-field col s1">
-                    <button class="btn waves-effect waves-light grey lighten-1" type="submit" name="action">
-                        <i class="material-icons right">send</i>
-                    </button>
-                </div>
-            </form>
-        </div>
+        
     </div>
     <!-- dibawah ini footer -->
     <footer>

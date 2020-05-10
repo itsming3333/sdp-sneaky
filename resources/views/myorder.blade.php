@@ -40,7 +40,8 @@
                     $(this).removeClass('open');
                 }
             });      
-            $('.tabs').tabs();      
+            $('.tabs').tabs();    
+            $('.modal').modal();  
         });
     </script>
 </head>
@@ -58,11 +59,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -88,15 +95,17 @@
         </div>
         <div class="row">
             <div class="col s3">
-                <a href="" class="tulisan">Account Dashboard</a>
+                <a href="/goAccdash" class="tulisan">Account Dashboard</a>
                 <hr>
-                <a href="" class="tulisan">Edit Account</a>
+                <a href="/goEditacc" class="tulisan">Edit Account</a>
                 <hr>
-                <a href="" class="tulisan">Address Book</a>
+                <a href="/goAdress" class="tulisan">Address Book</a>
                 <hr>
-                <a href="" class="tulisan">My Orders</a>
+                <a href="/goMyorder" class="tulisan">My Orders</a>
                 <hr>
-                <a href="" class="tulisan">My Wishlist</a>
+                <a href="/goWishlist" class="tulisan">My Wishlist</a>
+                <hr>
+                <a href="/logout" class="tulisan" style="color:red;">Logout</a>
                 <hr>
             </div>
             <div class="col s8 offset-s1">
@@ -105,35 +114,60 @@
                         <table>
                             <thead style="background-color: #cfcfcf;opacity: 0.7;">
                               <tr>
-                                  <th>Name</th>
-                                  <th>Item Name</th>
-                                  <th>Item Price</th>
+                                <th>ID Transaksi</th>
+                                <th>Status Pesanan</th>
+                                <th>Detail Alamat</th>
+                                <th>Update Terakhir</th>
+                                <th>Total Harga Sneaker</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                     
                             <tbody>
-                              <tr>
-                                <td>Alvin</td>
-                                <td>Eclair</td>
-                                <td>$0.87</td>
-                              </tr>
-                              <tr>
-                                <td>Alan</td>
-                                <td>Jellybean</td>
-                                <td>$3.76</td>
-                              </tr>
-                              <tr>
-                                <td>Jonathan</td>
-                                <td>Lollipop</td>
-                                <td>$7.00</td>
-                              </tr>
+                                @foreach($htrans as $h)
+                                    <tr>
+                                        <td class="tengah">TR{{$h->tgl_beli}}#{{$h->id_transaksi}}</td>
+                                        @if($h->status_pengiriman != "DONE")
+                                            <td class="tengah tulisan" style="color:red;">{{$h->status_pengiriman}}</td>
+                                        @else
+                                            <td class="tengah tulisan" style="color:green;">{{$h->status_pengiriman}}</td>
+                                        @endif
+                                        <td class="tengah">
+                                            <a class="waves-effect waves-light btn pink darken-1 modal-trigger" href="#modal{{$h->id_transaksi}}">View</a>
+                                            <div id="modal{{$h->id_transaksi}}" class="modal">
+                                                <div class="modal-content">
+                                                    <h4>Detail Alamat</h4>
+                                                    @foreach($address as $a)
+                                                        @if($a->id_addr == $h->id_addr)
+                                                            @foreach($kota as $k)
+                                                                @if($k->id_kota == $a->id_kota)
+                                                                    @foreach($provinsi as $p)
+                                                                        @if($k->id_provinsi == $p->id_provinsi)
+                                                                            <p>{{$a->nama_alamat}}, {{$k->nama_kota}}, {{$p->nama_provinsi}} {{$a->kode_pos}}, Indonesia</p>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="#!" class="modal-action modal-close waves-effect waves-red btn red lighten-1">Close</a>
+                                                </div>
+                                            </div>   
+                                        </td>
+                                        <td class="tengah">{{$h->updated_at}}</td>
+                                        <td class="tengah">{{ 'IDR '.number_format($h->total, 2, ",",".") }}</td>
+                                        <td class="tengah">
+                                            <form action="/detailOrderCustomer" method="GET">
+                                            <input type="hidden" name="id_trans" value="{{$h->id_transaksi}}">
+                                                <button class="waves-effect waves-light btn pink darken-1 modal-trigger">Detail</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                           </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s3 offset-s8">
-                        jumlah items disini
                     </div>
                 </div>
             </div>

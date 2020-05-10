@@ -61,11 +61,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -90,9 +96,10 @@
             <hr>
         </div>
         <div class="isi" style="margin-left: 20px;text-align: justify;">
-            <p style="font-size: 30px;">Mohon cek email anda untuk memverifikasi email yang anda daftarkan.</p>
+            <p style="font-size: 30px;">Silahkan cek kembali email anda untuk melakukan verifikasi</p>
+            <h3 style="color:#02075d;">{{$email}}</h3>
         </div>
-        <a class="waves-effect waves-light btn grey lighten-2 proceed" style="margin-left: 20px;color: #02075d;">Ok</a>
+        <a href="{{url('/goLogin')}}" class="waves-effect waves-light btn grey lighten-2 proceed" style="margin-left: 20px;color: #02075d;">Login Now</a>
     </div>
     <!-- dibawah ini footer -->
     <footer>

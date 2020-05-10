@@ -58,11 +58,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -88,65 +94,98 @@
         </div>
         <div class="row">
             <div class="col s3">
-                <a href="" class="tulisan">Account Dashboard</a>
+                <a href="/goAccdash" class="tulisan">Account Dashboard</a>
                 <hr>
-                <a href="" class="tulisan">Edit Account</a>
+                <a href="/goEditacc" class="tulisan">Edit Account</a>
                 <hr>
-                <a href="" class="tulisan">Address Book</a>
+                <a href="/goAdress" class="tulisan">Address Book</a>
                 <hr>
-                <a href="" class="tulisan">My Orders</a>
+                <a href="/goMyorder" class="tulisan">My Orders</a>
                 <hr>
-                <a href="" class="tulisan">My Wishlist</a>
+                <a href="/goWishlist" class="tulisan">My Wishlist</a>
+                <hr>
+                <a href="/logout" class="tulisan" style="color:red;">Logout</a>
                 <hr>
             </div>
-            <div class="col s8 offset-s1">
-                <div class="row">
-                    <div class="col s12" style="border: 2px solid #cfcfc4;">
-                        <span class="tulisan" style="font-size:20px;">
-                            Account Information
-                        </span>
-                        <a href=""><i class="material-icons right">create</i></a>
-                        <hr>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input id="first_name" type="text" class="validate">
-                                <label for="first_name" style="color:#8c8c8c">First Name</label>
-                              </div>
-                              <div class="input-field col s6">
-                                <input id="last_name" type="text" class="validate">
-                                <label for="last_name" style="color:#8c8c8c">Last Name</label>
-                              </div>
-                              <div class="input-field col s12">
-                                <input id="email" type="email" class="validate">
-                                <label for="email" style="color:#8c8c8c">Email</label>
-                              </div>
+           
+                <div class="col s8 offset-s1">
+                <form action="{{url('/handleEditInfo')}}" method="post">
+                @csrf
+                    
+                    <div class="row">
+                        @if (Session::has('msg'))
+                            <div class="col s12" style="background-color: lightgreen; border-left: 5px solid green; margin-top: 20px; padding: 10px;">
+                                <div class="font" style="font-size: 12pt;">
+                                    {{ Session::get('msg') }}
+                                </div>
+                            </div>
+                        @endif
+                        <div class="col s12" style="border: 2px solid #cfcfc4;">
+                            <span class="tulisan" style="font-size:20px;">
+                                Account Information
+                            </span>
+                            <hr>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input name="nama" type="text" class="validate" value="{{$user_logon->nama}}">
+                                    <label for="first_name" style="color:#8c8c8c">Full Name</label>
+                                    <div style="color:red;">{{ $errors->first('name') }}</div>
+                                </div>
+                                <div class="input-field col s12">
+                                    <input name="email" type="email" class="validate" value="{{$user_logon->email}}">
+                                    <label for="email" style="color:#8c8c8c">Email</label>
+                                    <div style="color:red;">{{ $errors->first('email') }}</div>
+                                </div>
+                            </div>
+                            <input type="submit" class="waves-effect waves-light btn grey lighten-2" style="margin:10px;float:right;" value="Save">
+                        </div>
+                    </div>
+                </form>
+                <form action="{{url('/handleEditPassword')}}" method="post">
+                @csrf
+                    <div class="row">
+                        @if (Session::has('msg_pass_error'))
+                            <div class="col s12" style="background-color: #FAEBE7; border-left: 5px solid #DF280A; margin-top: 20px; padding: 10px;">
+                                <div class="font" style="font-size: 12pt;">
+                                    {{ Session::get('msg_pass_error') }}
+                                </div>
+                            </div>
+                        @endif
+                        @if (Session::has('msg_pass'))
+                            <div class="col s12" style="background-color: lightgreen; border-left: 5px solid green; margin-top: 20px; padding: 10px;">
+                                <div class="font" style="font-size: 12pt;">
+                                    {{ Session::get('msg_pass') }}
+                                </div>
+                            </div>
+                        @endif
+                        <div class="col s12" style="border: 2px solid #cfcfc4;">
+                            <span class="tulisan" style="font-size:20px;">
+                                Change Password
+                            </span>
+                            <hr>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input name="curr_password" type="password" class="validate">
+                                    <label for="first_name" style="color:#8c8c8c">Current Password</label>
+                                    <div style="color:red;">{{ $errors->first('curr_password') }}</div>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input name="new_password" type="password" class="validate">
+                                    <label for="last_name" style="color:#8c8c8c">New Password</label>
+                                    <div style="color:red;">{{ $errors->first('new_password') }}</div>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input name="confirm_password" type="password" class="validate">
+                                    <label for="last_name" style="color:#8c8c8c">Confirm Password</label>
+                                    <div style="color:red;">{{ $errors->first('confirm_password') }}</div>
+                                </div>
+                            </div>
+                            <input type="submit" class="waves-effect waves-light btn grey lighten-2" style="margin:10px;float:right;" value="Save">
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12" style="border: 2px solid #cfcfc4;">
-                        <span class="tulisan" style="font-size:20px;">
-                            Change Password
-                        </span>
-                        <a href=""><i class="material-icons right">create</i></a>
-                        <hr>
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <input id="first_name" type="password" class="validate">
-                                <label for="first_name" style="color:#8c8c8c">Current Password</label>
-                              </div>
-                              <div class="input-field col s6">
-                                <input id="last_name" type="password" class="validate">
-                                <label for="last_name" style="color:#8c8c8c">New Password</label>
-                              </div>
-                              <div class="input-field col s6">
-                                <input id="last_name" type="password" class="validate">
-                                <label for="last_name" style="color:#8c8c8c">Confirm Password</label>
-                              </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </form>
+            
         </div>
     </div>
     

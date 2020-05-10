@@ -84,11 +84,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -118,25 +124,32 @@
                     <div class="col s12">
                         <h4 class="tulisan-h4">Category</h4>
                         <hr>
-                        <a href="" class="tulisan">MEN</a> <br>
-                        <a href="" class="tulisan">WOMEN</a> <br>
-                        <a href="" class="tulisan">KIDS</a> <br>
+                        <a href="" class="tulisan">Athletic Men</a> <br>
+                        <a href="" class="tulisan">Plimsoll Men</a> <br>
+                        <a href="" class="tulisan">Hightop Men</a> <br>
+                        <a href="" class="tulisan">Athletic Women</a> <br>
+                        <a href="" class="tulisan">Plimsoll Women</a> <br>
+                        <a href="" class="tulisan">Hightop Women</a> <br>
+                        <a href="" class="tulisan">Community Design Men</a> <br>
+                        <a href="" class="tulisan">Community Design Men</a> <br>
+                        <a href="" class="tulisan">Kids</a> <br>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <h4 class="tulisan-h4">BRAND</h4>
-                        <hr>
-                        <a href="" class="tulisan">Adidas</a> <br>
-                        <a href="" class="tulisan">Bata</a><br>
-                        <a href="" class="tulisan">KW</a><br>
+                        <h4 class="tulisan-h4">TOP BRAND</h4>
+                        @foreach($brand as $s)
+                            <a href="" class="tulisan">{{$s->brand_sneaker}}</a><br>
+                        @endforeach
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
                         <h4 class="tulisan-h4">SIZE</h4>
                         <hr>
-                        <a class="waves-effect waves-light btn-small grey lighten-2" style="color: black; font-weight: bold;">13</a>
+                        @foreach($size as $s)
+                            <a class="waves-effect waves-light btn-small grey lighten-2" style="color: black; font-weight: bold;">{{$s->ukuran_sneaker}}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -147,6 +160,7 @@
                             <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='dropdown1' style="color: black;margin-top: 20px;">SORT BY</a>
                         </span>
                     </div>
+                    <!--pagination-->
                     <div class="col s3 offset-s6" style="margin-top: 20px;">
                         <a href="" class="tulisan-angka">1</a>
                         <a href="" class="tulisan-angka">2</a>
@@ -156,22 +170,26 @@
                     </div>
                 </div>
                 <hr style="margin-top: -5px;">
-                <div class="row">
-                    <div class="col s12">
+                <!--isi sepatu-->
+                @foreach ($sneaker as $s)
+                <form action="/handleBarang" method="post">
+                @csrf
+                    <div class="col s4" style="">
                         <div class="row">
-                            <div class="col s4">
-                                <div class="row" id="box">
-                                    <img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt="">
-                                    <center>
-                                        <div id="popup">
-                                            <a class="waves-effect waves-light btn indigo" style="width: 170px;">SHOP NOW</a> <a class="waves-effect waves-light btn indigo" style="width: 70px;"><i class="material-icons">star</i></a>
-                                        </div>
-                                    </center>
-                                </div>
+                            <div class="row" id="box" style="padding: 10px;">
+                                <img src="{{asset('assets/images/sneakers/'.$s->id_sneaker.'-side.jpeg')}}" alt="" width="100%" height="300px"> 
+                                <input type="hidden" name="id_sneaker" value="{{$s->id_sneaker}}">
+                                <h5>{{$s->nama_sneaker}}</h5>
+                                <br>
+                                {{ 'IDR '.number_format($s->harga_sneaker, 2, ",",".") }}
+                                <br>
+                                <input type="submit" value="*" name="btnDetail" style="color: black;margin-top: 20px;" class="waves-effect waves-light btn-small grey lighten-2">
+                                <input type="submit" value="Detail Item" name="btnDetail" style="color: black;margin-top: 20px;" class="waves-effect waves-light btn-small grey lighten-2">
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
+                @endforeach
             </div>
         </div>
     </div>

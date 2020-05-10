@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +14,9 @@ class model_post extends Model
         'id_user',
         'total_up',
         'total_down',
-        'tgl_post'
+        'tgl_post',
+        'judul_post',
+        'caption_post',
+        'id_approver'
     ];
 }

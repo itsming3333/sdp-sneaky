@@ -56,11 +56,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -90,92 +96,42 @@
                     <thead>
                       <tr>
                           <th data-field="id">Product</th>
-                          <th data-field="name">QTY</th>
                           <th data-field="price">Price</th>
                           <th data-field="tombol"> </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                            <div class="col s4">
-                                <img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt="data Foto" class="fotoCart">
-                            </div>
-                            <div class="col s8">
-                                <div class="row">
-                                    <div class="col s12">
-                                        Air Jordan
+                      @foreach($sneaker as $s)
+                        @foreach($wishlist as $w)
+                            @if($s->id_sneaker == $w->id_dsneaker)
+                            <tr>
+                                <td>
+                                    <div class="col s4">
+                                        <img src="{{asset('assets/images/sneakers/'.$s->id_sneaker.'-side.jpeg')}}" alt="data Foto" class="fotoCart">
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col s12 tebal">
-                                        Size: 8
+                                    <div class="col s8">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                {{$s->nama_sneaker}}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="angka">
-                            <div class="input-field col s6 offset-s3" >
-                                <input id="icon_prefix" type="number" class="validate" style="text-align: center;" min="0">
-                            </div>
-                        </td>
-                        <td class="tengah">RP. 1.000.000</td>
-                        <td class="tengah">
-                            <div class="row">
-                                <div class="col s8">
-                                    <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Add to Cart</a>
-                                </div>
-                                <div class="col s2">
-                                    <a href=""><i class="material-icons left icon-brown">delete</i></a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col s8">
-                                    <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEdit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-                                </div>
-                            </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                            <div class="col s4">
-                                <img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt="data Foto" class="fotoCart">
-                            </div>
-                            <div class="col s8">
-                                <div class="row">
-                                    <div class="col s12">
-                                        Air Jordan
+                                </td>
+                                <td class="tengah">{{ 'IDR '.number_format($s->harga_sneaker, 2, ",",".") }}</td>
+                                <td class="tengah">
+                                    <div class="row">
+                                        <div class="col s8">
+                                            <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Shop Now</a>
+                                        </div>
+                                        <div class="col s2">
+                                            <a href=""><i class="material-icons left icon-brown">delete</i></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col s12 tebal">
-                                        Size: 8
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="angka">
-                            <div class="input-field col s6 offset-s3">
-                                <input id="icon_prefix" type="number" class="validate" style="text-align: center;" min="0">
-                            </div>
-                        </td>
-                        <td class="tengah">RP. 1.000.000</td>
-                        <td class="tengah">
-                            <div class="row">
-                                <div class="col s8">
-                                    <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Add to Cart</a>
-                                </div>
-                                <div class="col s2">
-                                    <a href=""><i class="material-icons left icon-brown">delete</i></a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col s8">
-                                    <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEdit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-                                </div>
-                            </div>
-                        </td>
-                      </tr>
+                                </td>
+                            </tr>
+                            @endif
+                        @endforeach
+                      @endforeach
                     </tbody>
                   </table>
             </div>
@@ -183,9 +139,8 @@
         <div class="row">
             <div class="col s12">
                 <div class="row">
-                    <div class="col s3 offset-s8">
-                        <a class="waves-effect waves-light btn grey lighten-2 proceed">UPDATE WISHLIST</a>
-                        <a class="waves-effect waves-light btn grey lighten-2 proceed" style="margin-left: 10px;">ADD ALL TO CART</a>
+                    <div class="col s3 offset-s10">
+                        <a class="waves-effect waves-light btn grey lighten-2 proceed">DELETE ALL</a>
                     </div>
                 </div>
             </div>

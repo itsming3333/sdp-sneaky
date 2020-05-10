@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,6 @@ class model_user extends Model
         'status_verifikasi',
         'jenis_user',
         'status_ban',
-        'alamat_user',
-        'kota_asal'
+        'alamat_user'
     ];
 }

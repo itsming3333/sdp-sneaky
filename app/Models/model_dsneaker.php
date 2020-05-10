@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +14,6 @@ class model_dsneaker extends Model
         'id_sneaker',
         'warna_sneaker',
         'ukuran_sneaker',
-        'stok_sneaker'
+        'status_stok'
     ];
 }

@@ -47,24 +47,17 @@
             });      
             $('.toggle').on('click', function() {
                 $('.menu').toggleClass('active');
-            });      
+            });
+            $('.dropdown-trigger').dropdown(); 
+            $('select').formSelect();     
         });
     </script>
 </head>
 <body>
     <!-- drop down content-->
-    <ul id='jenisUSer' class='dropdown-content'>
-        <li><a href="#!">Penjual</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#!">Customer</a></li>
-    </ul>
-    <ul id='jenisUSer' class='dropdown-content'>
-        <li><a href="#!">jatim</a></li>
-        <li><a href="#!">jabar</a></li>
-    </ul>
-    <ul id='jenisUSer' class='dropdown-content'>
-        <li><a href="#!">jember</a></li>
-        <li><a href="#!">bratang</a></li>
+    <ul id='dropdown1' class='dropdown-content'>
+        <li><a href="#!">Name</a></li>
+        <li><a href="#!">Price</a></li>
     </ul>
     <div id="search"> 
         <form role="search" id="searchform" action="/search" method="get">
@@ -79,11 +72,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -113,59 +112,84 @@
             </div>
         </div>
         <div class="row">
-            <form action="" class="col s12">
+            <form action="/handleRegister" method="POST" class="col s12">
+            @csrf
                 <div class="row">
                     <div class="input-field col s6">
-                      <input id="first_name" type="text" class="validate">
+                      <input id="first_name" name="first_name" type="text" class="validate">
                       <label for="first_name">First Name</label>
+                      <div style="color:red;">{{ $errors->first('first_name') }}</div>
                     </div>
                     <div class="input-field col s6">
-                      <input id="last_name" type="text" class="validate">
+                      <input id="last_name" name="last_name" type="text" class="validate">
                       <label for="last_name">Last Name</label>
+                      <div style="color:red;">{{ $errors->first('last_name') }}</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                      <input id="username" type="text" class="validate">
+                      <input id="username" name="username" type="text" class="validate">
                       <label for="username">Username</label>
+                      <div style="color:red;">{{ $errors->first('username') }}</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                      <input id="password" type="password" class="validate">
+                      <input id="password" name="password" type="password" class="validate">
                       <label for="password">Password</label>
+                      <div style="color:red;">{{ $errors->first('password') }}</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                      <input id="email" type="email" class="validate">
+                      <input id="email" name="email" type="email" class="validate">
                       <label for="email">Email</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='jenisUser' style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Jenis User</a>
+                      <div style="color:red;">{{ $errors->first('email') }}</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                      <textarea id="alamat" class="materialize-textarea"></textarea>
+                        <select name="jenis_user">
+                            <option value="" disabled selected>Pilih Jenis User</option>
+                            <option value="customer">Customer</option>
+                            <option value="seller">Seller</option>
+                        </select>
+                        <label>Jenis User</label>
+                        <div style="color:red;">{{ $errors->first('jenis_user') }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select name="provinsi">
+                            <option value="" disabled selected>Pilih Provinsi</option>
+                            @foreach ($provinsi as $p)
+                                <option value="{{$p->nama_provinsi}}">{{$p->nama_provinsi}}</option>
+                            @endforeach
+                        </select>
+                        <label>Provinsi</label>
+                        <div style="color:red;">{{ $errors->first('provinsi') }}</div>
+                    </div>
+                    <div class="input-field col s6">
+                        <select name="kota">
+                            <option value="" disabled selected>Pilih Kota</option>
+                            @foreach ($kota as $k)
+                                <option value="{{$k->id_kota}}">{{$k->nama_kota}}</option>
+                            @endforeach
+                        </select>
+                        <label>Kota</label>
+                        <div style="color:red;">{{ $errors->first('kota') }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                      <textarea name="alamat" id="alamat" class="materialize-textarea"></textarea>
                       <label for="alamat">Alamat</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='provinsi' style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">--Pilih Provinsi--</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <a class='dropdown-trigger btn grey lighten-2' href='#' data-target='kota' style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">--Pilih Kota--</a>
+                      <div style="color:red;">{{ $errors->first('alamat') }}</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s3 offset-s10">
-                        <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;"><i class="material-icons right">send</i>Submit</a>
+                        <input type="submit" class="waves-effect waves-light btn grey lighten-2" style="" value="Sign Up">
                     </div>
                 </div>
             </form>

@@ -41,6 +41,8 @@
                 }
             });      
             $('.tabs').tabs();      
+            $('.dropdown-trigger').dropdown(); 
+            $('select').formSelect();
         });
     </script>
 </head>
@@ -58,11 +60,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -88,30 +96,97 @@
         </div>
         <div class="row">
             <div class="col s3">
-                <a href="" class="tulisan">Account Dashboard</a>
+                <a href="/goAccdash" class="tulisan">Account Dashboard</a>
                 <hr>
-                <a href="" class="tulisan">Edit Account</a>
+                <a href="/goEditacc" class="tulisan">Edit Account</a>
                 <hr>
-                <a href="" class="tulisan">Address Book</a>
+                <a href="/goAdress" class="tulisan">Address Book</a>
                 <hr>
-                <a href="" class="tulisan">My Orders</a>
+                <a href="/goMyorder" class="tulisan">My Orders</a>
                 <hr>
-                <a href="" class="tulisan">My Wishlist</a>
+                <a href="/goWishlist" class="tulisan">My Wishlist</a>
+                <hr>
+                <a href="/logout" class="tulisan" style="color:red;">Logout</a>
                 <hr>
             </div>
             <div class="col s3 offset-s1">
-                <span class="tulisan">DEFAULT SHIPPING ADDRESS</span>
-                <br>
-                nama <br>
-                alamat <br>
-                dan lain lain
+                <h3>Add New Address</h3>
+                <form action="/handleAddAdress" method="POST" class="col s12" style="border:2px solid grey;padding:20px;">
+                @csrf
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <select name="provinsi">
+                                <option value="" disabled selected>Pilih Provinsi</option>
+                                @foreach ($provinsi as $p)
+                                    <option value="{{$p->nama_provinsi}}">{{$p->nama_provinsi}}</option>
+                                @endforeach
+                            </select>
+                            <label>Provinsi</label>
+                            <div style="color:red;">{{ $errors->first('provinsi') }}</div>
+                        </div>
+                        <div class="input-field col s6">
+                            <select name="kota">
+                                <option value="" disabled selected>Pilih Kota</option>
+                                @foreach ($kota as $k)
+                                    <option value="{{$k->id_kota}}">{{$k->nama_kota}}</option>
+                                @endforeach
+                            </select>
+                            <label>Kota</label>
+                            <div style="color:red;">{{ $errors->first('kota') }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                        <textarea name="alamat" id="alamat" class="materialize-textarea"></textarea>
+                        <label for="alamat">Alamat</label>
+                        <div style="color:red;">{{ $errors->first('alamat') }}</div>
+                        </div>
+                        <div class="input-field col s6">
+                        <textarea name="kodepos" id="kodepos" class="materialize-textarea"></textarea>
+                        <label for="alamat">Kode Pos</label>
+                        <div style="color:red;">{{ $errors->first('alamat') }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s3 offset-s5">
+                            <input type="submit" class="waves-effect waves-light btn grey lighten-2" style="" value="Add new Address">
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="col s3 offset-s1">
-                <span class="tulisan">NEW ADDRESS</span> <br>
-                Add your new address
-                <br>
-                <br>
-                <a class="waves-effect waves-light btn grey lighten-2 proceed">Add new Address</a>
+                <span class="tulisan">USER ADDRESS</span> <br>
+                {{$user_logon->alamat_user}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+            </div>
+            <div class="col s9" style="float:left;">
+                <hr>
+                @if(count($address) < 1)
+                    <h3>No Shipping Address</h3>
+                    Add new address book now to make order easier!
+                @else
+                    <h3>Shipping Address List</h3>
+                    @foreach($address as $a)
+                        <div style="float:left;width:40%;margin:20px;border:2px solid gray;padding:20px;">
+                            <h4>{{$a->nama_alamat}}</h4>
+                            @foreach($kota as $k)
+                                @if($k->id_kota == $a->id_kota)
+                                    <h5>{{$k->nama_kota}}, 
+                                        @foreach($provinsi as $p)
+                                            @if($k->id_provinsi == $p->id_provinsi)
+                                                {{$p->nama_provinsi}}
+                                            @endif
+                                        @endforeach
+                                    </h5>
+                                    <h5>{{$a->kode_pos}}</h5>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>

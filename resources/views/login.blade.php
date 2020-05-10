@@ -33,6 +33,12 @@
         border-bottom: 1px solid #cfcfcf !important;
         box-shadow: 0 1px 0 0 #cfcfcf !important
     }
+
+    input[type=submit]{
+        color: #02075d;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: bold;
+    }
     </style><script>
         $(document).ready(function(){
             $('a[href="#search"]').on('click', function(event) {                    
@@ -64,11 +70,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -94,46 +106,68 @@
         </div>
         <div class="row">
             <!-- login -->
-            <div class="col s6">
-                <div class="content">
-                    <div class="judul">
-                        <h5 style="font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Login</h5>
-                    </div>
-                    <div class="loginForm">
-                        <div class="row">
-                            <div class="input-field col s8">
-                                <i class="material-icons prefix">account_circle</i>
-                                <label for="first_name">User Name</label>
-                                <input id="user_name" type="text" class="validate">
+            <form action="{{url('/handleLogin')}}" method="POST">
+                @csrf
+                <div class="col s6">
+                    <div class="content">
+                        <div class="judul">
+                            <h5 style="font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Login</h5>
+                        </div>
+                        <div class="loginForm">
+                        @if (Session::has('msg'))
+                            <div class="col s12" style="background-color: #FAEBE7; border-left: 5px solid #DF280A; margin-top: 20px; padding: 10px;">
+                                <div class="font" style="font-size: 12pt;">
+                                    {{ Session::get('msg') }}
+                                </div>
                             </div>
-                            <div class="input-field col s8">
-                                <i class="material-icons prefix">vpn_key</i>
-                                <label for="last_name">Password</label>
-                                <input id="password" type="text" class="validate">
+                        @endif
+                            <div class="row">
+                                <div class="input-field col s8">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <label for="first_name">User Name</label>
+                                    <input name="username" type="text" class="validate">
+                                    <div style="color:red;">{{ $errors->first('username') }}</div>
+                                </div>
+                                <div class="input-field col s8">
+                                    <i class="material-icons prefix">vpn_key</i>
+                                    <label for="last_name">Password</label>
+                                    <input name="password" type="password" class="validate">
+                                    <div style="color:red;">{{ $errors->first('password') }}</div>
+                                </div>
+                            </div>
+                            <div class="col s3 offset-s3">
+                                <input type="submit" class="waves-effect waves-light btn grey lighten-2" style="" value="login">
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
+            
             <!-- sign up -->
             <div class="col s6">
                 <div class="content">
                     <div class="judul">
-                        <h5 style="font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">New Customer</h5>
+                        <h5 style="font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">New User</h5>
                     </div>
-                    <div class="desc" style="margin-top:50px;">
-                        REGISTER NOW ! IT'S FREE <br> <br>
-                        GET A LOT OF INFO FROM US
+                    <div class="desc" style="margin-top:10px;">
+                        REGISTER NOW ! IT'S FREE
+                    </div>
+                    <ul>
+                    <li><h4>Customer</h4></li>
+                    <li>Order your favorite sneakers</li>
+                    <li>Get along with our community</li>
+                    <li>Create your own design</li>
+                    <li><h4>Seller</h4></li>
+                    <li>Become our partner</li>
+                    <li>Open your own shop for 24 hours</li>
+                    <li>500.000 customers are coming everyday</li>
+                    </ul>
+                    <div class="row">
+                        <div class="col s6">
+                            <a href="{{ url('/goRegister') }}" class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">REGISTER NOW</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s3 offset-s3">
-                <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">LOGIN</a>
-            </div>
-            <div class="col s6">
-                <a class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">REGISTER NOW</a>
             </div>
         </div>
     </div>

@@ -62,11 +62,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -92,77 +98,82 @@
         </div>
         <div class="row">
             <div class="col s3">
-                <a href="" class="tulisan">Account Dashboard</a>
-                <hr>
-                <a href="" class="tulisan">Edit Account</a>
-                <hr>
-                <a href="" class="tulisan">Address Book</a>
-                <hr>
-                <a href="" class="tulisan">My Orders</a>
-                <hr>
-                <a href="" class="tulisan">My Wishlist</a>
-                <hr>
+                @if($user_logon->jenis_user == "customer")
+                    <a href="/goAccdash" class="tulisan">Account Dashboard</a>
+                    <hr>
+                    <a href="/goEditacc" class="tulisan">Edit Account</a>
+                    <hr>
+                    <a href="/goAdress" class="tulisan">Address Book</a>
+                    <hr>
+                    <a href="/goMyorder" class="tulisan">My Orders</a>
+                    <hr>
+                    <a href="/goWishlist" class="tulisan">My Wishlist</a>
+                    <hr>
+                    <a href="/logout" class="tulisan" style="color:red;">Logout</a>
+                    <hr>
+                @else
+                    <a href="/goAccdash" class="tulisan">Account Dashboard</a>
+                    <hr>
+                    <a href="/goEditacc" class="tulisan">Edit Account</a>
+                    <hr>
+                    <a href="/logout" class="tulisan" style="color:red;">Logout</a>
+                    <hr>
+                @endif
+                
             </div>
             <div class="col s8 offset-s1">
                 <div class="row">
                     <div class="col s12">
-                        Hi <span class="nama-cust">Fu Ming!</span> &nbsp&nbsp<b>Thanks for joining Sneaky</b>
+                        Hi <span class="nama-cust">{{$user_logon->nama}}!</span> &nbsp&nbsp<b>Thanks for joining Sneaky</b>
                         <hr>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <span class="tulisan">NEW ORDERS</span>&nbsp&nbsp<a href="" class="tulisan">VIEW ALL</a>
+                        <span class="tulisan" style="color:black; font-size:200%;">NEW ORDERS</span>&nbsp&nbsp<a href="" class="tulisan">VIEW ALL</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <table>
-                            <thead style="background-color: #cfcfcf;opacity: 0.7;">
-                              <tr>
-                                  <th>Name</th>
-                                  <th>Item Name</th>
-                                  <th>Item Price</th>
-                              </tr>
-                            </thead>
-                    
-                            <tbody>
-                              <tr>
-                                <td>Alvin</td>
-                                <td>Eclair</td>
-                                <td>$0.87</td>
-                              </tr>
-                              <tr>
-                                <td>Alan</td>
-                                <td>Jellybean</td>
-                                <td>$3.76</td>
-                              </tr>
-                              <tr>
-                                <td>Jonathan</td>
-                                <td>Lollipop</td>
-                                <td>$7.00</td>
-                              </tr>
-                            </tbody>
-                          </table>
+                @if(empty($order))
+                    <h5>No Order</h5>
+                @else
+                    <div class="row">
+                        <div class="col s12">
+                            <table>
+                                <thead style="background-color: #cfcfcf;opacity: 0.7;">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Item Name</th>
+                                    <th>Item Price</th>
+                                </tr>
+                                </thead>
+                        
+                                <tbody>
+                                
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                @endif
                 <div class="row">
                     <div class="col s12">
                         <div class="row">
                             <span class="tulisan" style="font-size:24px;">Account Information</span>
                         </div>
                         <div class="row">
-                            <div class="col s12" style="border: 2px solid #cfcfc4;">
+                            <div class="col s12" style="border: 2px solid #cfcfc4; padding:20px;">
                                 <span class="tulisan" style="font-size:20px;">
                                     Contact Information
                                 </span>
-                                <a href=""><i class="material-icons right">create</i></a>
+                                <a href="{{url('/goEditacc')}}"><i class="material-icons right">create</i></a>
                                 <hr>
-                                data orang disni
+                                {{$user_logon->nama}}
+                                <br>
+                                {{$user_logon->email}}
+                                <br>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col s12" style="border: 2px solid #cfcfc4;">
+                            <div class="col s12" style="border: 2px solid #cfcfc4;padding:20px;">
                                 <span class="tulisan" style="font-size:20px;">
                                     Address Information
                                 </span>
@@ -177,7 +188,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col s12">
-                                        ini data address
+                                        <h5>{{$user_logon->alamat_user}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +219,7 @@
                         <h4 style="font-family: 'Roboto Condensed', sans-serif;">FOLLOW US.</h3>
                         <ul>
                             <li><a href=""><i class="fab fa-facebook-f fa-3x"></i><span style="margin-left:25px;"> SneakyIndonesia </span></a></li>
-                            <li><a href=""><i class="fab fa-twitter fa-3x"></i><span style="margin-left:6px;"> @SneakyIndones </span></a></li>
+                            <li><a href=""><i class="fab fa-twitter fa-3x"></i><span style="margin-left:6px;"> @SneakyIndonesia </span></a></li>
                             <li><a href=""><i class="fab fa-instagram fa-3x" aria-hidden="true"></i><span style="margin-left:11px;"> Sneaky_Indonesia </span></a></li>
                         </ul>
                     </div>

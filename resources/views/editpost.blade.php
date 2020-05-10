@@ -66,11 +66,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -88,30 +94,90 @@
         <div class="swiper-button-prev swiper-button"></div>
     </div>
     <!-- isi post -->
-    <div class="container" style="max-width: 1920px; width: 80%;">
-        <div class="row">
-            <div class="col s12" style="background-color: #e0e0e0;">
-                <h3>Share Your Post</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6 offset-s3">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea placeholder="Text here" id="textarea1" class="materialize-textarea"></textarea>
-                      </div>
-                </div>
-                <div class="row">
-                    <div class="col s1">
-                        <a href=""><i class="material-icons">attach_file</i></a>
-                    </div>
-                    <div class="col s1 offset-s10">
-                        <a href=""><i class="material-icons">send</i></a>
-                    </div>
+    <form action="/saveEpost" method="POST">
+        @csrf
+        <div class="container" style="max-width: 1920px; width: 80%;">
+            <div class="row">
+                <div class="col s12" style="background-color: #e0e0e0;">
+                    <h3>Edit Your Post</h3>
                 </div>
             </div>
+            <?php $p = $post;?>
+            <div class="row" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <div class="col s12">
+                    <div class="row" >
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="color:gray;font-size:100%;">
+                            <div class="input-field col s12">
+                                <input name="judul_post" style="font-size:300%;" placeholder="Placeholder" id="first_name" type="text" class="validate tulisan" value="{{$p->judul_post}}">
+                                <label for="first_name">Judul Post</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <img src="{{asset('assets/images/post/'.$p->id_post.'.jpeg')}}" alt="image couldn't loaded" width="100%">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="input-field col s12">
+                                <input name="isi_post" placeholder="Placeholder" id="Isi Post" type="text" class="validate" value="{{$p->caption_post}}">
+                                <label for="first_name">Judul Post</label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col s3" style="color: green;font-size:200%;">
+                            <i class="material-icons">thumb_up</i> {{$p->total_up}}
+                        </div>
+                        <div class="col s3" style="color: red;font-size:200%;">
+                            <i class="material-icons">thumb_down</i> {{$p->total_down}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 tulisan" style="background-color: #e0e0e0;">
+                            <h5>All Comment</h5>
+                        </div>
+                        <div class="col s12">
+                            <hr>
+                            @foreach($rpost as $rv)
+                                <div class="row">
+                                    @if($rv->thumbs == 1)
+                                        <div class="col s1" style="color: green;">
+                                            <i class="material-icons">thumb_up</i>
+                                        </div>
+                                    @else
+                                        <div class="col s1" style="color: red;">
+                                            <i class="material-icons">thumb_down</i>
+                                        </div>
+                                    @endif
+                                    <div class="col s2 tulisan" style="color:black;">
+                                        @foreach($user as $u)
+                                            @if($u->id_user == $rv->id_user)
+                                                {{$u->nama}}
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    <div class="col s8">
+                                        {{$rv->komentar_post}}
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="container" style="border-radius:50px;position:fixed;right:0;bottom:25px;width:130px;height:80px;background-color:#02075d;padding:1%;">
+            <div class="row">
+                <div class="col s12">
+                    <input type="hidden" name="id_post" value="{{$post->id_post}}">
+                    <button type="submit" class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
     <!-- dibawah ini footer -->
     <footer>
         <div class="container">

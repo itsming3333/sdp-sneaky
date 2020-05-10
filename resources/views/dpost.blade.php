@@ -66,11 +66,43 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @elseif($user_logon->jenis_user == "customer")
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @else
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{url('myItem')}}';">My item</li>
+                    <li onclick="location.href='{{url('myOrder')}}';">My Order</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @endif
             </ul>
         </div>
     </div>
@@ -91,45 +123,105 @@
     <div class="container" style="max-width: 1920px; width: 80%;">
         <div class="row">
             <div class="col s12" style="background-color: #e0e0e0;">
-                <h3>Detail Post</h3>
+                <h3>{{$post->judul_post}}</h3>
             </div>
         </div>
         <div class="row">
             <div class="col s8 offset-s2">
-                <div class="row">
+                <div class="row" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                     <div class="col s12">
-                        <img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt="">
-                    </div>
-                    <div class="col s12">
-                        <p>ini paragraf </p>
-                    </div>
-                    <div class="col s12">
-                        ini jumlah org yg komen
+                        <div class="row" >
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col s12" style="color:gray;font-size:100%;">
+                            @foreach($user as $u)
+                                @if($u->id_user == $post->id_user)
+                                    By : {{$u->nama}}
+                                @endif
+                            @endforeach
+                            </div>
+                            <div class="col s12">
+                                <img src="{{asset('assets/images/post/'.$post->id_post.'.jpeg')}}" alt="image couldn't loaded" width="100%">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <p>{{$post->caption_post}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col s3" style="color: green;font-size:200%;">
+                                <i class="material-icons">thumb_up</i> {{$post->total_up}}
+                            </div>
+                            <div class="col s3" style="color: red;font-size:200%;">
+                                <i class="material-icons">thumb_down</i> {{$post->total_down}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            
+                        </div>
+                        @foreach($rpost as $rv)
+                            <div class="row">
+                                @if($rv->thumbs == 1)
+                                    <div class="col s1" style="color: green;">
+                                        <i class="material-icons">thumb_up</i>
+                                    </div>
+                                @else
+                                    <div class="col s1" style="color: red;">
+                                        <i class="material-icons">thumb_down</i>
+                                    </div>
+                                @endif
+                                <div class="col s2 tulisan" style="color:black;">
+                                    @foreach($user as $u)
+                                        @if($u->id_user == $rv->id_user)
+                                            {{$u->nama}}
+                                        @endif
+                                    @endforeach
+                                </div>
+                                <div class="col s8">
+                                    {{$rv->komentar_post}}
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <form class="col s12" method="post" action="/handleRpost">
+                            @csrf
+                            <input type="hidden" name="id_post" value="{{$post->id_post}}">
+                            <div class="input-field col s6">
+                                <i class="material-icons prefix icon-edit">mode_edit</i>
+                                <textarea name="comment" placehodler="Message here" id="icon_prefix2" class="materialize-textarea"></textarea>
+                            </div>
+                            <div class="input-field col s4">
+                            <select name="thumbs">
+                                <option value="up">UP</option>
+                                <option value="down">DOWN</option>
+                            </select>
+                            <label>Thumbs</label>
+                            </div>
+                            <div class="input-field col s1">
+                                <button class="btn waves-effect waves-light grey lighten-1" type="submit" name="action">
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <i class="material-icons">thumb_up</i>
-                        <i class="material-icons">thumb_down</i>
-                    </div>
-                </div>
-                <div class="row">
-                    ini tempat orang komen
-                </div>
-                <form class="col s12">
-                    <div class="input-field col s8">
-                        <i class="material-icons prefix icon-edit">mode_edit</i>
-                        <textarea placehodler="Message here" id="icon_prefix2" class="materialize-textarea"></textarea>
-                    </div>
-                    <div class="input-field col s1">
-                        <button class="btn waves-effect waves-light grey lighten-1" type="submit" name="action">
-                            <i class="material-icons right">send</i>
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
+    @if($user_logon->jenis_user == "seller")
+        <div class="container" style="border-radius:50px;position:fixed;right:0;bottom:25px;width:220px;height:80px;background-color:#02075d;padding:1%;">
+            <div class="row">
+                <div class="col s12">
+                    <form action="/approve" method="GET">
+                        <button class="waves-effect waves-light btn grey lighten-2" style="color: #02075d;font-family: 'Roboto Condensed', sans-serif;font-weight: bold;">Approve Design!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
     <!-- dibawah ini footer -->
     <footer>
         <div class="container">
@@ -151,7 +243,7 @@
                         <h4 style="font-family: 'Roboto Condensed', sans-serif;">FOLLOW US.</h3>
                         <ul>
                             <li><a href=""><i class="fab fa-facebook-f fa-3x"></i><span style="margin-left:25px;"> SneakyIndonesia </span></a></li>
-                            <li><a href=""><i class="fab fa-twitter fa-3x"></i><span style="margin-left:6px;"> @SneakyIndones </span></a></li>
+                            <li><a href=""><i class="fab fa-twitter fa-3x"></i><span style="margin-left:6px;"> @SneakyIndonesia </span></a></li>
                             <li><a href=""><i class="fab fa-instagram fa-3x" aria-hidden="true"></i><span style="margin-left:11px;"> Sneaky_Indonesia </span></a></li>
                         </ul>
                     </div>
@@ -169,6 +261,9 @@
     <script>
         $('.toggle').on('click', function() {
             $('.menu').toggleClass('active');
+        });
+        $(document).ready(function(){
+            $('select').formSelect();
         });
     </script>
     <script type="text/javascript" src="{{asset('assets/js/swiper.min.js')}}"></script>

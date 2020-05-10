@@ -55,11 +55,17 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                <li onclick="location.href='{{ url('') }}';">Home</li>
+                <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                @else
+                    <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                @endif
+                <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                <li onclick="location.href='{{url('goContact')}}';">Contact</li>
             </ul>
         </div>
     </div>
@@ -83,6 +89,13 @@
                 <h3>Shopping Cart</h3>
             </div>
         </div>
+        @if (Session::has('userbeda'))
+            <div class="col s12" style="background-color: lightgreen; border-left: 5px solid green; margin-top: 20px; padding: 10px;">
+                <div class="font" style="font-size: 12pt;">
+                    {{ Session::get('userbeda') }}
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col s7">
                 <table>
@@ -95,87 +108,102 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                            <div class="col s4">
-                                <img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt="data Foto" class="fotoCart">
-                            </div>
-                            <div class="col s8">
-                                <div class="row">
-                                    <div class="col s12">
-                                        Air Jordan
+                        @foreach($cart as $c)
+                            <tr>
+                                <td>
+                                    <div class="col s2">
+                                        @foreach($dsneaker as $ds)
+                                            @if($ds->id_dsneaker == $c->id_dsneaker)
+                                                @foreach($sneaker as $s)
+                                                    @if($s->id_sneaker == $ds->id_sneaker)
+                                                        <img src="{{asset('assets/images/sneakers/'.$s->id_sneaker.'-side.jpeg')}}" width="100%" height="60px" alt="data Foto">
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        @endforeach
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col s12 tebal">
-                                        Size: 8
+                                    <div class="col s8">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                @foreach($dsneaker as $ds)
+                                                    @if($ds->id_dsneaker == $c->id_dsneaker)
+                                                        @foreach($sneaker as $s)
+                                                            @if($s->id_sneaker == $ds->id_sneaker)
+                                                                {{$s->nama_sneaker}}
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s6 tebal">
+                                                @foreach($dsneaker as $ds)
+                                                    @if($ds->id_dsneaker == $c->id_dsneaker)
+                                                        Size : {{$ds->ukuran_sneaker}}
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            <div class="col s6 tebal">
+                                                @foreach($dsneaker as $ds)
+                                                    @if($ds->id_dsneaker == $c->id_dsneaker)
+                                                        <div style="color:{{$ds->warna_sneaker}};text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">{{$ds->warna_sneaker}}</div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="tengah">RP. 1.000.000</td>
-                        <td class="angka">
-                            <div class="input-field col s6 offset-s3" >
-                                <input id="icon_prefix" type="number" class="validate" style="text-align: center;" min="0">
-                            </div>
-                        </td>
-                        <td class="tengah">
-                            <div class="col s8">
-                                Rp. 1
-                            </div>
-                            <div class="col s2 offset-s2">
-                                <a href=""><i class="material-icons left icon-brown">clear</i></a>
-                            </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                            <div class="col s4">
-                                <img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt="data Foto" class="fotoCart">
-                            </div>
-                            <div class="col s8">
-                                <div class="row">
-                                    <div class="col s12">
-                                        Air Jordan
+                                </td>
+                                <td class="tengah">
+                                    @foreach($dsneaker as $ds)
+                                        @if($ds->id_dsneaker == $c->id_dsneaker)
+                                            @foreach($sneaker as $s)
+                                                @if($s->id_sneaker == $ds->id_sneaker)
+                                                    {{ 'IDR '.number_format($s->harga_sneaker, 2, ",",".") }}
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="angka">
+                                    <div class="input-field col s6 offset-s3" >
+                                        <input id="icon_prefix" type="number" class="validate" style="text-align: center;" min="0" value="{{$c->jumlah}}">
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col s12 tebal">
-                                        Size: 8
+                                </td>
+                                <td class="tengah">
+                                    <div class="col s8">
+                                        {{ 'IDR '.number_format($c->subtotal, 2, ",",".") }}
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="tengah">RP. 1.000.000</td>
-                        <td class="angka">
-                            <div class="input-field col s6 offset-s3">
-                                <input id="icon_prefix" type="number" class="validate" style="text-align: center;" min="0">
-                            </div>
-                        </td>
-                        <td class="tengah">
-                            <div class="col s8">
-                                Rp. 1
-                            </div>
-                            <div class="col s2 offset-s2">
-                                <a href=""><i class="material-icons left icon-brown">clear</i></a>
-                            </div>
-                        </td>
-                      </tr>
+                                    <div class="col s2">
+                                        <a href=""><i class="material-icons left icon-brown">clear</i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                   </table>
             </div>
             <div class="col s4 offset-s1">
                 <h3>Grand Total</h3>
-                <p>harga disini</p>
+                <p style="font-size:150%;">{{ 'IDR '.number_format($grandtotal, 2, ",",".") }}</p>
+                @foreach($user as $u)
+                    @if($id_seller == $u->id_user)
+                        Order To : <br><div class="tulisan">{{$u->nama}}</div>
+                    @endif
+                @endforeach
                 <br>
-                <a class="waves-effect waves-light btn grey lighten-2 proceed">PROCEED TO CHECKOUT</a>
+                <form action="/goCheckout" method="GET">
+                    <button class="waves-effect waves-light btn grey lighten-2 proceed">Proceed to Checkout</button>
+                </form>
             </div>
         </div>
         <div class="row">
             <div class="col s12">
                 <div class="row">
                     <div class="col s3">
-                        <a class="waves-effect waves-light btn grey lighten-2 proceed">EMPTY CART</a>
+                        <form action="/clearCart" method="GET">
+                            <button type="submit" class="waves-effect waves-light btn grey lighten-2 proceed">EMPTY CART</button>
+                        </form>
                     </div>
                 </div>
             </div>

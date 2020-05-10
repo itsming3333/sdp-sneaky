@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +18,9 @@ class model_htrans extends Model
         'total',
         'detail_pengiriman',
         'status_pengiriman',
-        'biaya_pengiriman'
+        'biaya_pengiriman',
+        'id_seller',
+        'id_addr',
+        'resi'
     ];
 }

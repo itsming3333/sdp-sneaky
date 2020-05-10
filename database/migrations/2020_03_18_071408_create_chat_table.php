@@ -17,7 +17,7 @@ class CreateChatTable extends Migration
             $table->bigIncrements('id_chat');
             $table->integer('id_user');
             $table->integer('id_tujuan');
-            $table->string('isi_chat');
+            $table->string('isi_chat',1000);
             $table->date('tgl_chat');
             $table->timestamps();
         });

@@ -31,6 +31,21 @@
         });
     </script>
     <style>
+    .tulisan-h4{
+        font-family: 'Roboto Condensed', sans-serif;  
+        text-align: justify;
+        color: #404d4d;
+    }
+    .tulisan-angka{
+        color: grey;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 18px;
+    }
+    .tulisan{
+        color: grey;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 20px;
+    }
     .swiper-container {
         width: 100%;
         height: 75%;
@@ -72,7 +87,7 @@
 </head>
 <body>
     <div id="search"> 
-        <form role="search" id="searchform" action="/search" method="get">
+        <form role="search" id="searchform" action="{{url('/q_shop')}}" method="get">
             <input value="" name="q" type="search" placeholder="Type to search"/>
         </form>
     </div>
@@ -84,11 +99,43 @@
         </span>
         <div class='menuContent'>
             <ul>
-            <li>Home</li>
-            <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
-            <li>Login</li>
-            <li>Contact</li>
-            <li>About us</li>
+                @if (empty($user_logon))
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @elseif($user_logon->jenis_user == "customer")
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li><a href="#search" style="text-decoration: none; color: black;">Search</a></li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    <li onclick="location.href='{{url('goCart')}}';">Cart</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @else
+                    <li onclick="location.href='{{ url('') }}';">Home</li>
+                    <li onclick="location.href='{{ url('goForum') }}';">Community</li>
+                    <li onclick="location.href='{{ url('goChat') }}';"><i class="material-icons">chat</i>Chat</li>
+                    @if (empty($user_logon))
+                        <li onclick="location.href='{{ url('goLogin') }}';">Login</li>
+                    @else
+                        <li onclick="location.href='{{ url('goAccdash') }}';">{{$user_logon->nama}}</li>
+                    @endif
+                    <li onclick="location.href='{{url('myItem')}}';">My item</li>
+                    <li onclick="location.href='{{url('myOrderAdmin')}}';">My Order</li>
+                    <li onclick="location.href='{{url('goContact')}}';">Contact</li>
+                @endif
             </ul>
         </div>
     </div>
@@ -107,18 +154,64 @@
     </div>
     <!-- isi -->
     <h2 style="text-align:center;font-family: 'Roboto Condensed', sans-serif;font-weight: bolder;"> Latest </h2>
-    <div class="swiper-container swiper2">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""><br><span>Air Jordan</span></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
-          <div class="swiper-slide"><img src="{{asset('assets/images/SwiperFoto/download.jpg')}}" alt=""></div>
+    <div class="swiper-container swiper2" style="height:600px;">
+        <div class="swiper-wrapper" >
+            <!--foreach sneaker highlight-->
+            @if(empty($user_logon))
+                @foreach($latest as $s)
+                    <div class="swiper-slide" >
+                        <form action="/handleBarang" method="post">
+                        @csrf
+                            <div class="col s4" style="">
+                                <div class="row">
+                                    <div class="row" id="box" style="padding: 10px;">
+                                        <img src="{{asset('assets/images/sneakers/'.$s->id_sneaker.'-side.jpeg')}}" alt="" width="25%" height="400px"> 
+                                        <input type="hidden" name="id_sneaker" value="{{$s->id_sneaker}}">
+                                        <br>
+                                        <h5>{{$s->nama_sneaker}}</h5>
+                                        {{ 'IDR '.number_format($s->harga_sneaker, 2, ",",".") }}
+                                        <br><br>
+                                        <input type="submit" value="*" name="btnDetail" style="color: black;margin-top: 0px;" class="waves-effect waves-light btn-small grey lighten-2">
+                                        <input type="submit" value="Detail Item" name="btnDetail" style="color: black;margin-top: 0px;" class="waves-effect waves-light btn-small grey lighten-2">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                @endforeach
+            @else
+                @if($user_logon->jenis_user == "customer")
+                    @foreach($latest as $s)
+                        <div class="swiper-slide" >
+                            <form action="/handleBarang" method="post">
+                            @csrf
+                                <div class="col s4" style="">
+                                    <div class="row">
+                                        <div class="row" id="box" style="padding: 10px;">
+                                            <img src="{{asset('assets/images/sneakers/'.$s->id_sneaker.'-side.jpeg')}}" alt="" width="25%" height="400px"> 
+                                            <input type="hidden" name="id_sneaker" value="{{$s->id_sneaker}}">
+                                            <br>
+                                            <h5>{{$s->nama_sneaker}}</h5>
+                                            {{ 'IDR '.number_format($s->harga_sneaker, 2, ",",".") }}
+                                            <br><br>
+                                            <input type="submit" value="*" name="btnDetail" style="color: black;margin-top: 0px;" class="waves-effect waves-light btn-small grey lighten-2">
+                                            <input type="submit" value="Detail Item" name="btnDetail" style="color: black;margin-top: 0px;" class="waves-effect waves-light btn-small grey lighten-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="row">
+                        <div class="col s12">
+                            <h3>You are now at Seller page</h3>
+                            Start selling your item now...
+                        </div>
+                    </div>
+                @endif
+            @endif
+            
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
@@ -127,15 +220,32 @@
         <div class="row">
             <div class="col s12">
                 <hr>
-                <center><span class="juduldesc"> OUR DAILY DOSE: ORIGINALS SNEAKERS SHOES ONLINE STORE </span></center>
-                <p class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non perspiciatis necessitatibus quas saepe molestiae nemo laboriosam esse ut aliquam, perferendis sit consectetur voluptates explicabo porro natus, molestias quaerat provident. Nihil.</p>
+                <center><span class="juduldesc"> SNEAKY: ORIGINALS SNEAKERS SHOES ONLINE STORE </span></center>
+                <p class="desc">Kebutuhan sepatu sneakers berkualitas originals sudah tidak bisa dibendung lagi.
+                            Kualitas yang ditawarkan dari material bahan originals akan membuat sepatu-sepatu sneakers tersebut sangat nyaman digunakan dan dipakai untuk fashion harian.
+                            Para pecinta sneakers atau sneakers head selalu ingin terus menerus melengkapi koleksi sepatu mereka.
+                            Memiliki sepatu sneakers limited edition bisa membuat mereka sangat senang dan didewakan oleh kolektor sepatu lainnya.
+                            Untuk memenuhi kebutuhan para kolektor dan sneakerhead yang mengidamkan koleksi sepatu sneakers terbaik, Sneaky pun hadir.
+                            Sneaky adalah toko online yang menjual sepatu sneakers originals yang menjual beragam sneakers edisi khusus atau edisi terbatas, dari beragam brand sneaker ternama dunia seperti Nike, Adidas, Puma.
+                            Jadi, jika sedang mencari dan ingin membeli sepatu sneakers originals, kunjungi saja website toko online Sneaky.
+                            Temukan sneakers shoes idaman secara online Anda di sana dengan harga  terbaik, produk sepatu originals pilihan.
+                            Sneaky akan segera mengirimkan barang tersebut secepatnya setelah Anda menyelesaikan pembayaran dan mengonfirmasikannya.
+                            Semua produk originals dari sepatu sneakers, originals fashion dan aksesoris tersebut tersedia untuk pria, wanita dan anak-anak.
+                            Toko online sepatu sneakers originals yang cocok untuk melengkapi koleksi sepatu sneakers dan beragam kebutuhan pakaian originals anda hanya di Sneaky.</p>
             </div>
         </div>
         <div class="row">
             <div class="col s12">
                 <hr>
                 <center><span class="juduldesc"> JUAL SEPATU SNEAKERS ONLINE ORIGINALS TERLENGKAP </span></center>
-                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores sed, voluptatum laudantium mollitia illum optio, tempore obcaecati alias ad a porro sapiente dicta numquam voluptatibus? Quos quisquam reprehenderit possimus! Deleniti.</p>    
+                <p class="desc">Sudah ada banyak toko online yang menjual sepatu sneakers, tapi tanpa jaminan keaslian barang dan kuaitas yang tidak bisa diketahui.
+                            Agar menghindari dari produk palsu, untuk itu lebih baik membeli sneakers shoes di toko online Sneaky.
+                            Tersedia beragam pilihan sneakers originals dari brand ternama dunia seperti Nike, Adidas, Puma untuk melengkapi koleksi Anda yang bisa dibeli secara online.
+                            Mengapa toko online Sneaky adalah tempat yang tepat untuk membeli sepatu sneakers originals? Karena, Hanya di Sneaky yang menjual beragam pilihan sneakers shoes limited edition secara online yang sulit ditemukan di tempat lain.
+                            Koleksi sepatu sneakers yang dijual secara online oleh Sneaky meliputi Nike Sportswear, Adidas, Puma Select dan jenis sneakers shoes lainnya.
+                            Selain produk-produk sepatu tersebut, online store ini juga menjual pakaian fashion berkualitas untuk kebutuhan fashion harian Anda.
+                            Koleksi lengkap, jaminan keaslian dan produk originals adalah yang ditawarkan oleh toko online originals fashion Sneaky.
+                            Tunggu apa lagi? Beli sepatu sneakers online originals di Sneaky sekarang!</p>    
             </div>
         </div>
     </div>

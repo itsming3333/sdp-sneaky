@@ -24,7 +24,6 @@ class CreateUserTable extends Migration
             $table->string('jenis_user');
             $table->smallInteger('status_ban');
             $table->string('alamat_user');
-            $table->string('kota_asal');
             $table->timestamps();
         });
     }
