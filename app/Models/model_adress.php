@@ -8,7 +8,7 @@ class model_address extends Model
 {
     protected $connection= 'mysql';
     protected $table = "address";
-    protected $primarykey = "id_addr";
+    protected $primaryKey = "id_addr";
     protected $fillable = [
         'id_addr',
         'id_user',
