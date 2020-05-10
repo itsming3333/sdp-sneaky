@@ -8,6 +8,7 @@ class model_dretur extends Model
 {
     protected $connection= 'mysql';
     protected $table= 'dretur';
+    protected $primaryKey= null;
     protected $fillable= [
         'id_transaksi',
         'id_dsneaker',
